@@ -156,7 +156,19 @@
 		});
 	}
 
-	document.querySelectorAll('.s3ds-viewer').forEach(initViewer);
+	function initializeAllViewers() {
+		document.querySelectorAll('.s3ds-viewer').forEach(initViewer);
+	}
+
+	// Wait for model-viewer element to be defined
+	if (window.customElements && window.customElements.whenDefined) {
+		window.customElements.whenDefined('model-viewer').then(function() {
+			initializeAllViewers();
+		});
+	} else {
+		// Fallback for browsers without custom elements support
+		window.addEventListener('DOMContentLoaded', initializeAllViewers);
+	}
 
 	document.addEventListener('click', function (event) {
 		var wrap = event.target.closest('.s3ds-viewer');

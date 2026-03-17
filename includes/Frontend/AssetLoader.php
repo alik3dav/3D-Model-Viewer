@@ -35,8 +35,8 @@ class AssetLoader {
 			}
 		}
 
-		wp_enqueue_script( 'model-viewer', $model_viewer_url, array(), S3DS_VERSION, array( 'strategy' => 'defer', 'in_footer' => false ) );
-		wp_script_add_data( 'model-viewer', 'type', 'module' );
+		wp_enqueue_script( 'model-viewer', $model_viewer_url, array(), S3DS_VERSION, true );
+		wp_script_add_data( 'model-viewer', 'async', true );
 
 		wp_enqueue_style( 's3ds-frontend', S3DS_PLUGIN_URL . 'assets/css/frontend.css', array(), S3DS_VERSION );
 		wp_enqueue_script( 's3ds-frontend', S3DS_PLUGIN_URL . 'assets/js/frontend.js', array(), S3DS_VERSION, true );
