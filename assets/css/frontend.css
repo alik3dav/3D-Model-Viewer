@@ -13,27 +13,18 @@
   right: 12px;
   z-index: 5;
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
-  max-width: min(320px, calc(100% - 24px));
   padding: 6px;
-  background: rgba(255, 255, 255, 0.76);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  border-radius: 999px;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
 }
 
 .wp3ds-toolbar button {
   appearance: none;
-  border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.355);
   color: #0f172a;
-  border-radius: 999px;
-  padding: 7px 11px;
+  border-radius: 4px;
+  padding: 4px 12px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0.01em;
@@ -44,7 +35,7 @@
 .wp3ds-toolbar button:hover {
   background: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.18), 0 6px 16px rgba(37, 99, 235, 0.12);
-  transform: translateY(-1px);
+
 }
 
 .wp3ds-toolbar button:active {
@@ -52,7 +43,7 @@
 }
 
 .wp3ds-toolbar button.is-active {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #2a58bb 0%, #1d4ed8 100%);
   color: #ffffff;
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.26);
 }
@@ -76,7 +67,7 @@
   display: grid;
   place-items: center;
   background: rgba(255,255,255,0.85);
-  font-size: 14px;
+  font-size: 12px;
   z-index: 2;
 }
 
@@ -88,9 +79,9 @@
   width: min(320px, calc(100% - 32px));
   padding: 16px;
   color: #0f172a;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.753);
+
+  border-radius: 12px;
   box-shadow: 0 24px 45px rgba(15, 23, 42, 0.18);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -103,8 +94,8 @@
   width: 28px;
   height: 28px;
   border: 0;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.16);
+  border-radius: 2px;
+  background: rgba(148, 163, 184, 0.041);
   color: #334155;
   font-size: 18px;
   line-height: 1;
@@ -122,20 +113,20 @@
 
 .wp3ds-part-modal__title {
   margin: 0 28px 8px 0;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.1;
 }
 
 .wp3ds-part-modal__description {
   margin: 0;
   color: #475569;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
 .wp3ds-part-modal__meta {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   margin-top: 16px;
 }
 

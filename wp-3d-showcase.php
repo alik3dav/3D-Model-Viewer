@@ -3,8 +3,8 @@
  * Plugin Name: WP 3D Showcase
  * Plugin URI: https://example.com
  * Description: Showcase GLB 3D models with zoom, rotate, pan, fullscreen, and explode view.
- * Version: 1.0.0
- * Author: Your Name
+ * Version: 1.0.1
+ * Author: Palaplast
  * Text Domain: wp-3d-showcase
  * Domain Path: /languages
  */
