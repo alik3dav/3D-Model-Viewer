@@ -12,7 +12,7 @@ use WP3DS\Helpers;
 defined( 'ABSPATH' ) || exit;
 
 class SettingsPage {
-	private const OPTION_HDRI_MAP_ATTACHMENT_ID       = 'wp3ds_hdri_map_attachment_id';
+	private const OPTION_HDRI_MAP_URL                 = 'wp3ds_hdri_map_url';
 	private const OPTION_SELECTION_HIGHLIGHT_COLOR    = 'wp3ds_selection_highlight_color';
 	private const OPTION_HOVER_HIGHLIGHT_COLOR        = 'wp3ds_hover_highlight_color';
 	private const OPTION_SELECTION_GLOW_INTENSITY     = 'wp3ds_selection_glow_intensity';
@@ -46,11 +46,11 @@ class SettingsPage {
 	public function register_settings(): void {
 		register_setting(
 			'wp3ds_settings',
-			self::OPTION_HDRI_MAP_ATTACHMENT_ID,
+			self::OPTION_HDRI_MAP_URL,
 			array(
-				'type'              => 'integer',
-				'sanitize_callback' => array( $this, 'sanitize_hdri_map_attachment_id' ),
-				'default'           => 0,
+				'type'              => 'string',
+				'sanitize_callback' => array( $this, 'sanitize_hdri_map_url' ),
+				'default'           => '',
 			)
 		);
 
@@ -98,13 +98,13 @@ class SettingsPage {
 			'wp3ds_environment_section',
 			__( 'Environment Lighting', 'wp-3d-showcase' ),
 			static function (): void {
-				echo '<p>' . esc_html__( 'Choose a self-hosted HDRI file from the WordPress Media Library. It is applied globally to every 3D viewer.', 'wp-3d-showcase' ) . '</p>';
+				echo '<p>' . esc_html__( 'Provide an external direct URL to a .hdr environment map. It is applied globally to every 3D viewer.', 'wp-3d-showcase' ) . '</p>';
 			},
 			'wp3ds-settings'
 		);
 
 		add_settings_field(
-			self::OPTION_HDRI_MAP_ATTACHMENT_ID,
+			self::OPTION_HDRI_MAP_URL,
 			__( 'HDRI Map', 'wp-3d-showcase' ),
 			array( $this, 'render_hdri_field' ),
 			'wp3ds-settings',
@@ -153,24 +153,24 @@ class SettingsPage {
 		);
 	}
 
-	public function sanitize_hdri_map_attachment_id( $value ): int {
-		$attachment_id = Helpers::resolve_local_attachment_id( $value, self::HDR_EXTENSION );
+	public function sanitize_hdri_map_url( $value ): string {
+		$url = esc_url_raw( (string) $value );
 
-		if ( $attachment_id > 0 ) {
-			return $attachment_id;
+		if ( '' === $url ) {
+			return '';
 		}
 
-		if ( empty( $value ) ) {
-			return 0;
+		if ( Helpers::is_local_url( $url ) || ! Helpers::is_allowed_attachment_extension( $url, self::HDR_EXTENSION ) ) {
+			add_settings_error(
+				'wp3ds_settings',
+				'wp3ds_invalid_hdri',
+				__( 'Please provide a valid external .hdr URL.', 'wp-3d-showcase' )
+			);
+
+			return $this->get_hdri_map_url();
 		}
 
-		add_settings_error(
-			'wp3ds_settings',
-			'wp3ds_invalid_hdri',
-			__( 'Please choose a .hdr file from the Media Library.', 'wp-3d-showcase' )
-		);
-
-		return $this->get_hdri_map_attachment_id();
+		return $url;
 	}
 
 	public function sanitize_selection_highlight_color( $value ): string {
@@ -190,17 +190,14 @@ class SettingsPage {
 	}
 
 	public function render_hdri_field(): void {
-		$value          = $this->get_hdri_map_url();
-		$attachment_id  = $this->get_hdri_map_attachment_id();
+		$value = $this->get_hdri_map_url();
 		?>
-		<div class="wp3ds-admin-fields wp3ds-admin-media-field">
-			<input type="hidden" id="wp3ds_hdri_map_attachment_id" value="<?php echo esc_attr( (string) $attachment_id ); ?>">
-			<input type="url" id="wp3ds_hdri_map_url" name="<?php echo esc_attr( self::OPTION_HDRI_MAP_ATTACHMENT_ID ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text widefat" data-media-url-input data-media-id-target="#wp3ds_hdri_map_attachment_id" placeholder="https://example.com/wp-content/uploads/your-map.hdr">
+		<div class="wp3ds-admin-fields">
+			<input type="url" id="wp3ds_hdri_map_url" name="<?php echo esc_attr( self::OPTION_HDRI_MAP_URL ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text widefat" placeholder="https://example.com/path/to/your-map.hdr">
 			<p>
-				<button type="button" class="button" data-media-target="#wp3ds_hdri_map_url" data-media-id-target="#wp3ds_hdri_map_attachment_id" data-allowed-extension="hdr" data-media-title="<?php echo esc_attr__( 'Select HDRI Map', 'wp-3d-showcase' ); ?>" data-media-button="<?php echo esc_attr__( 'Use this HDRI map', 'wp-3d-showcase' ); ?>"><?php esc_html_e( 'Select HDRI', 'wp-3d-showcase' ); ?></button>
-				<button type="button" class="button-link-delete" data-clear-media="#wp3ds_hdri_map_url" data-clear-media-id="#wp3ds_hdri_map_attachment_id"><?php esc_html_e( 'Remove file', 'wp-3d-showcase' ); ?></button>
+				<button type="button" class="button-link-delete" data-clear-media="#wp3ds_hdri_map_url"><?php esc_html_e( 'Clear URL', 'wp-3d-showcase' ); ?></button>
 			</p>
-			<p class="description"><?php esc_html_e( 'Only self-hosted .hdr files from the WordPress Media Library are accepted.', 'wp-3d-showcase' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Enter an external direct link to a .hdr file. Media Library HDRI selection is disabled.', 'wp-3d-showcase' ); ?></p>
 		</div>
 		<?php
 	}
@@ -289,12 +286,14 @@ class SettingsPage {
 		return $data;
 	}
 
-	public function get_hdri_map_attachment_id(): int {
-		return absint( get_option( self::OPTION_HDRI_MAP_ATTACHMENT_ID, 0 ) );
-	}
-
 	public function get_hdri_map_url(): string {
-		return Helpers::get_attachment_url( $this->get_hdri_map_attachment_id(), self::HDR_EXTENSION );
+		$url = esc_url_raw( (string) get_option( self::OPTION_HDRI_MAP_URL, '' ) );
+
+		if ( '' === $url || Helpers::is_local_url( $url ) || ! Helpers::is_allowed_attachment_extension( $url, self::HDR_EXTENSION ) ) {
+			return '';
+		}
+
+		return $url;
 	}
 
 	/**

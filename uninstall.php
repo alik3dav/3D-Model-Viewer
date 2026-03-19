@@ -7,6 +7,7 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
+delete_option( 'wp3ds_hdri_map_url' );
 delete_option( 'wp3ds_hdri_map_attachment_id' );
 delete_option( 'wp3ds_selection_highlight_color' );
 delete_option( 'wp3ds_hover_highlight_color' );

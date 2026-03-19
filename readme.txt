@@ -12,7 +12,7 @@ Show self-hosted GLB models with orbit controls, explode view, fullscreen mode, 
 
 == Description ==
 
-WP 3D Showcase lets you publish interactive GLB viewers without relying on remote runtime dependencies. The plugin bundles its JavaScript locally, uses WordPress media attachments for model and HDRI files, and provides a shortcode-first workflow that is ready for WordPress.org review.
+WP 3D Showcase lets you publish interactive GLB viewers without relying on remote runtime dependencies. The plugin bundles its JavaScript locally, uses WordPress media attachments for GLB files, supports external HDRI map URLs, and provides a shortcode-first workflow that is ready for WordPress.org review.
 
 Features include:
 
@@ -27,15 +27,16 @@ Features include:
 
 1. Upload the plugin folder to `/wp-content/plugins/` or install it through **Plugins > Add New**.
 2. Activate **WP 3D Showcase**.
-3. Upload `.glb` and optional `.hdr` files to the WordPress Media Library.
-4. Create a new **3D Showcase** item and select a GLB file in the **3D Model Settings** metabox.
-5. Insert the shortcode `[wp3ds_viewer id="123"]` or `[wp3ds_viewer slug="example-item"]` into any post or page.
+3. Upload your `.glb` file to the WordPress Media Library.
+4. Add an external direct `.hdr` URL in **Settings > WP 3D Showcase** if you want environment lighting.
+5. Create a new **3D Showcase** item and select a GLB file in the **3D Model Settings** metabox.
+6. Insert the shortcode `[wp3ds_viewer id="123"]` or `[wp3ds_viewer slug="example-item"]` into any post or page.
 
 == Frequently Asked Questions ==
 
-= Can I use external model URLs? =
+= Can I use external model or HDRI URLs? =
 
-No. The plugin only accepts self-hosted Media Library attachments for GLB and HDRI files so the viewer stays self-contained and WordPress.org-friendly.
+Models must still use self-hosted Media Library attachments. HDRI maps now use external direct `.hdr` URLs configured in the plugin settings.
 
 = How do I configure explode view parts? =
 
