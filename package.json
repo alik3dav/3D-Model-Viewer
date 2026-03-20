@@ -5,7 +5,8 @@
   "description": "Build pipeline for the 3D Model Viewer WordPress plugin.",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "package-plugin": "bash scripts/package-plugin.sh"
   },
   "devDependencies": {
     "vite": "^5.4.19"
