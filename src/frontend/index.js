@@ -40,6 +40,7 @@ class WP3DSViewer {
     this.environmentMap = null
     this.animationFrameId = 0
     this.hasStarted = false
+    this.startMode = (root.dataset.startMode || 'auto').toLowerCase()
 
     this.isolateMode = false
     this.selected = null
@@ -65,6 +66,11 @@ class WP3DSViewer {
     if (!this.modelUrl) {
       this.showLoading(frontendI18n.missingModel || 'No model file is assigned to this viewer.')
       this.hideStartOverlay()
+      return
+    }
+
+    if (this.startMode !== 'manual') {
+      window.requestAnimationFrame(() => this.init())
     }
   }
 
